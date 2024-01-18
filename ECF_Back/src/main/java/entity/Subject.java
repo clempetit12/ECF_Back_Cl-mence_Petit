@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,16 @@ public class Subject {
 
     @ManyToMany(mappedBy = "subjectList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Teacher> teacherList;
+
+    public Subject(String title, Duration duration, int coefficient, List<Teacher> teacherList) {
+        this.title = title;
+        this.duration = duration;
+        this.coefficient = coefficient;
+        this.teacherList = teacherList;
+        this.scheduleList = new ArrayList<>();
+        this.gradeList = new ArrayList<>();
+    }
+
     public void setIdSubject(Long idSubject) {
         this.idSubject = idSubject;
     }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,10 +16,10 @@ public class Classroom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_classroom", nullable = false)
-    private Long classroom;
+    private Long iDclassroom;
 
     private String nameClassroom;
-    private int levelClassroom;
+    private String levelClassroom;
 
     @ManyToOne(cascade =CascadeType.ALL)
     @JoinColumn(name = "id_department")
@@ -29,18 +30,34 @@ public class Classroom {
 
     @ManyToMany(mappedBy = "classroomList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Teacher> teacherList;
-    public void setClassroom(Long classroom) {
-        this.classroom = classroom;
+
+    public Classroom(String nameClassroom, String levelClassroom, Department department, List<Student> studentList, List<Teacher> teacherList) {
+        this.nameClassroom = nameClassroom;
+        this.levelClassroom = levelClassroom;
+        this.department = department;
+        this.studentList = studentList;
+        this.teacherList = teacherList;
     }
 
-    public Long getClassroom() {
-        return classroom;
+    public void setIdClassroom(Long classroom) {
+        this.iDclassroom = iDclassroom;
     }
 
+    public Long getIdClassroom() {
+        return iDclassroom;
+    }
+
+    public void addStudent(Student student) {
+        if (studentList == null) {
+            studentList = new ArrayList<>();
+        }
+        studentList.add(student);
+        student.setClassroom(this);
+    }
     @Override
     public String toString() {
         return "Classroom{" +
-                "classroom=" + classroom +
+                "classroom=" + iDclassroom +
                 ", nameClassroom='" + nameClassroom + '\'' +
                 ", levelClassroom=" + levelClassroom +
                 ", studentList=" + studentList +

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_student", nullable = false)
-    private Long student;
+    private Long idStudent;
 
     @NotNull
     private String lastName;
@@ -36,19 +37,26 @@ public class Student {
 
     }
 
+    public Student(String lastName, String firstName, Date dateOfBirth, String email) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.gradeList = new ArrayList<>();
+    }
 
     public void setStudent(Long student) {
-        this.student = student;
+        this.idStudent = idStudent;
     }
 
     public Long getStudent() {
-        return student;
+        return idStudent;
     }
 
     @Override
     public String toString() {
         return "Student{" +
-                "student=" + student +
+                "idStudent=" + idStudent +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +

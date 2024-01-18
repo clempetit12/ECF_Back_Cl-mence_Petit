@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_teacher", nullable = false)
-    private Long teacher;
+    private Long idTeacher;
 
     @NotNull
     private String lastName;
@@ -49,19 +50,44 @@ public class Teacher {
 
     }
 
-
-    public void setTeacher(Long teacher) {
-        this.teacher = teacher;
+    public Teacher(String lastName, String firstName, int age, boolean isPrincipalTeacher, boolean isHeadTeacher, Department department) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.age = age;
+        this.isPrincipalTeacher = isPrincipalTeacher;
+        this.isHeadTeacher = isHeadTeacher;
+        this.department = department;
+        this.classroomList = new ArrayList<>();
+        this.subjectList = new ArrayList<>();
     }
 
-    public Long getTeacher() {
-        return teacher;
+
+    public void setIdTeacher(Long teacher) {
+        this.idTeacher = idTeacher;
+    }
+
+    public Long getIdTeacher() {
+        return idTeacher;
+    }
+
+    public void addClassroom(Classroom classroom) {
+        if (classroomList == null) {
+            classroomList = new ArrayList<>();
+        }
+        classroomList.add(classroom);
+    }
+
+    public void addSubject(Subject subject) {
+        if (subjectList == null) {
+            subjectList = new ArrayList<>();
+        }
+        subjectList.add(subject);
     }
 
     @Override
     public String toString() {
         return "Teacher{" +
-                "teacher=" + teacher +
+                "idTeacher=" + idTeacher +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", age=" + age +

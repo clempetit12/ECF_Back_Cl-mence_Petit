@@ -24,8 +24,12 @@ public class Grade {
     @JoinColumn(name = "id_student")
     private Student student;
 
-
-
+    public Grade(int grade, String comment, Subject subject, Student student) {
+        this.grade = grade;
+        this.comment = comment;
+        this.subject = subject;
+        this.student = student;
+    }
 
     public void setIdGrade(Long idGrade) {
         this.idGrade = idGrade;

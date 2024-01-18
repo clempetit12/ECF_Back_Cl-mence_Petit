@@ -22,7 +22,7 @@ public class Subject {
     private Duration duration;
     private int coefficient;
 
-    @OneToMany (mappedBy = "subject", cascade =CascadeType.ALL)
+    @OneToMany (mappedBy = "subject", cascade =CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Grade> gradeList;
 
     @ManyToMany(mappedBy = "subjectList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -52,6 +52,10 @@ public class Subject {
         return idSubject;
     }
 
+    public void addGrade(Grade grade) {
+        gradeList.add(grade);
+        grade.setSubject(this);
+    }
     @Override
     public String toString() {
         return "Subject{" +

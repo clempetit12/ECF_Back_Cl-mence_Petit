@@ -30,9 +30,12 @@ public class Student {
     @JoinColumn(name = "id_classroom")
     private Classroom classroom;
 
-    @OneToMany (mappedBy = "student", cascade =CascadeType.ALL)
+    @OneToMany (mappedBy = "student", cascade =CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Grade> gradeList;
 
+    @ManyToOne(cascade =CascadeType.ALL)
+    @JoinColumn(name = "id_schedule")
+    private Schedule schedule;
     public Student() {
 
     }
@@ -45,12 +48,21 @@ public class Student {
         this.gradeList = new ArrayList<>();
     }
 
-    public void setIdStudent(Long student) {
+    public void setIdStudent(Long idStudent) {
         this.idStudent = idStudent;
     }
 
+
     public Long getIdStudent() {
         return idStudent;
+    }
+
+    public void addGrade(Grade grade) {
+        if (gradeList == null) {
+            gradeList = new ArrayList<>();
+        }
+        gradeList.add(grade);
+        grade.setStudent(this);
     }
 
     @Override

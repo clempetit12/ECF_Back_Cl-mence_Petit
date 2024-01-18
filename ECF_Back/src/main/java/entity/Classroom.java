@@ -25,7 +25,7 @@ public class Classroom {
     @JoinColumn(name = "id_department")
     private Department department;
 
-    @OneToMany (mappedBy = "classroom",fetch = FetchType.EAGER)
+    @OneToMany (mappedBy = "classroom",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Student> studentList;
 
     @ManyToMany(mappedBy = "classroomList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

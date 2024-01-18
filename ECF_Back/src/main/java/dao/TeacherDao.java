@@ -1,6 +1,7 @@
 package dao;
 
 import DaoImpl.Repository;
+import entity.Subject;
 import entity.Teacher;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -49,6 +50,17 @@ public class TeacherDao implements Repository<Teacher> {
 
     @Override
     public Teacher getById(Long id) {
+        Session session = null;
+        try{
+            session=sessionFactory.openSession();
+            Teacher teacher = session.get(Teacher.class,id);
+            return teacher;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
         return null;
     }
 

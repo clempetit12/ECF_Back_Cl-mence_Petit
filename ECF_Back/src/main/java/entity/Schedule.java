@@ -20,6 +20,9 @@ public class Schedule {
     private Date date;
     private Duration hour;
 
+    @OneToMany (mappedBy = "schedule",fetch = FetchType.EAGER)
+    private List<Student> studentList;
+
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(

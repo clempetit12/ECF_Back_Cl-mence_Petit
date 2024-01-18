@@ -31,7 +31,7 @@ public class Teacher {
     @JoinColumn(name = "id_department")
     private Department department;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "teacher_classroom",
             joinColumns = @JoinColumn(name = "id_teacher"),

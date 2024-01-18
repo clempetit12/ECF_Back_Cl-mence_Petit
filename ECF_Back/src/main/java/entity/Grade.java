@@ -16,11 +16,11 @@ public class Grade {
     private int grade ;
     private String comment;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_subject")
     private Subject subject;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_student")
     private Student student;
 
@@ -43,5 +43,15 @@ public class Grade {
 
     public Long getIdGrade() {
         return idGrade;
+    }
+
+    @Override
+    public String toString() {
+        return "Grade{" +
+                "idGrade=" + idGrade +
+                ", grade=" + grade +
+                ", comment='" + comment + '\'' +
+                ", subject=" + subject +
+                '}';
     }
 }

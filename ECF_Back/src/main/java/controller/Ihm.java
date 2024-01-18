@@ -242,6 +242,7 @@ public class Ihm {
                 Duration duration = Duration.ofMinutes(minutes);
                 System.out.println("Saisissez le coefficient de la matière ");
                 int coefficent = scanner.nextInt();
+                scanner.nextLine();
                 System.out.println();
                 do {
                     System.out.println("Saisissez l'identifiant de l'enseignant (saisissez 0 pour arrêter) : ");
@@ -252,7 +253,7 @@ public class Ihm {
 
                     }
                 } while (teacherId != 0);
-                Subject subject = new Subject(name,duration,coefficent,teacherList);
+                Subject subject = new Subject(name, duration, coefficent, teacherList);
                 if (highSchoolService.createSubject(subject)) {
                     System.out.println("La matière a bien été créé avec id " + subject.getIdSubject());
                 }
@@ -269,41 +270,48 @@ public class Ihm {
     private void createGrade() {
         try {
             int gradeGiven;
-            System.out.println("Combien de notes souhaitez vous ajouter ?");
+            System.out.println("Combien de notes souhaitez-vous ajouter ?");
             int nombre = scanner.nextInt();
             scanner.nextLine();
+
             for (int i = 0; i < nombre; i++) {
                 System.out.println("Quel est l'id de l'étudiant dont vous voulez mettre une note ?");
                 Long idStudent = scanner.nextLong();
                 Student student = highSchoolService.getStudent(idStudent);
                 System.out.println("idStudent: " + idStudent);
-                if(student != null) {
+
+                if (student != null) {
                     System.out.println("l'étudiant existe");
                 }
+
                 System.out.println("Quel est l'id de la matière dont vous voulez mettre une note ?");
                 Long idSubject = scanner.nextLong();
                 Subject subject = highSchoolService.getSubject(idSubject);
-                System.out.println("idStudent: " + idSubject);
+                System.out.println("idSubject: " + idSubject);
+
                 do {
                     System.out.println("Veuillez saisir la note (la note ne doit pas dépasser 20 et ne doit pas être négative");
                     gradeGiven = scanner.nextInt();
                     scanner.nextLine();
                 } while (gradeGiven > 20 || gradeGiven < 0);
+
                 System.out.println("Veuillez saisir un commentaire ");
                 String comment = scanner.nextLine();
+
                 Grade grade = new Grade(gradeGiven, comment, subject, student);
+                student.addGrade(grade);
+                subject.addGrade(grade);
+
                 if (highSchoolService.createGrade(grade)) {
                     System.out.println("Une note a bien été ajoutée avec id " + grade.getIdGrade());
                 }
-
             }
-
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-
         }
     }
+
 
     private void createClassroom() {
         try {
@@ -347,12 +355,14 @@ public class Ihm {
                 }
                 for (Student student : students) {
                     student.setClassroom(classroom);
+                    highSchoolService.updateStudent(student);
                 }
+
                 for (Teacher teacher : teachers) {
                     teacher.addClassroom(classroom);
                 }
-
             }
+
 
 
         } catch (Exception e) {
@@ -363,6 +373,7 @@ public class Ihm {
     }
 
     private void createSchedule() {
+
     }
 
     private void displayClassrooms() {
@@ -376,12 +387,36 @@ public class Ihm {
     }
 
     private void displayGradeStudent() {
+        System.out.println("Saisissez l'id de l'élève dont vous souhaitez voir les notes :");
+        Long idStudent = scanner.nextLong();
+        Student student = highSchoolService.getStudent(idStudent);
+        if (student != null) {
+            List<Grade> gradeList = highSchoolService.getGradeStudent(idStudent);
+            for (Grade grade : gradeList) {
+                System.out.println(grade);
+            }
+        }
+
     }
 
     private void displayAverageGradeStudent() {
+        System.out.println("Saisissez l'id de l'élève dont vous souhaitez voir les notes :");
+        Long idStudent = scanner.nextLong();
+        Student student = highSchoolService.getStudent(idStudent);
+        if (student != null) {
+            Long moyenne = highSchoolService.getAverageGrade(idStudent);
+            System.out.println("La moyennne générale de l'étudiant est de " + moyenne);
+        }
     }
 
     private void displayNumberStudentDepartment() {
+        System.out.println("Veuillez indiquer id du departement : ");
+        Long id = scanner.nextLong();;
+        Department department = highSchoolService.getDepartmentById(id);
+        if(department != null) {
+Long nombre = highSchoolService.displayNumberStudentDepartment(id);
+            System.out.println("Le nombre d'élève dans le département est de :" + nombre);
+        }
     }
 
     private void deleteStudent() {

@@ -76,6 +76,25 @@ public class HighSchoolService {
         return classroomDao.getAll();
     }
 
+    public List<Grade> getGradeStudent(Long id) {
+        return  gradeDao.getGradeStudent(id);
+    }
+
+    public Long getAverageGrade(Long id) {
+        return  gradeDao.getAverageGradeStudent(id);
+    }
+
+    public Long displayNumberStudentDepartment (Long id) {
+        return studentDao.displayNumberStudentDepartment(id);
+    }
+
+    public boolean updateStudent(Student student) {
+       if(studentDao.update(student)) {
+           return true;
+       };
+       return false;
+    }
+
 
 
 

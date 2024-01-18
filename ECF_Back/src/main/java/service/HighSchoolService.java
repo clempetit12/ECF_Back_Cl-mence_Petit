@@ -3,6 +3,8 @@ package service;
 import dao.*;
 import entity.*;
 
+import java.util.List;
+
 public class HighSchoolService {
     private ClassroomDao classroomDao;
     private DepartmentDao departmentDao;
@@ -68,6 +70,10 @@ public class HighSchoolService {
 
     public  Subject getSubject(Long idSubject) {
         return subjectDao.getById(idSubject);
+    }
+
+    public List<Classroom> getAllClassroom() {
+        return classroomDao.getAll();
     }
 
 

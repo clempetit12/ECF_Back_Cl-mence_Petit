@@ -25,10 +25,10 @@ public class Classroom {
     @JoinColumn(name = "id_department")
     private Department department;
 
-    @OneToMany (mappedBy = "classroom")
+    @OneToMany (mappedBy = "classroom",fetch = FetchType.EAGER)
     private List<Student> studentList;
 
-    @ManyToMany(mappedBy = "classroomList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "classroomList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Teacher> teacherList;
 
     public Classroom(String nameClassroom, String levelClassroom, Department department, List<Student> studentList, List<Teacher> teacherList) {
@@ -37,6 +37,10 @@ public class Classroom {
         this.department = department;
         this.studentList = studentList;
         this.teacherList = teacherList;
+    }
+
+    public Classroom() {
+
     }
 
     public void setIdClassroom(Long classroom) {
@@ -60,7 +64,6 @@ public class Classroom {
                 "classroom=" + iDclassroom +
                 ", nameClassroom='" + nameClassroom + '\'' +
                 ", levelClassroom=" + levelClassroom +
-                ", studentList=" + studentList +
                 '}';
     }
 }

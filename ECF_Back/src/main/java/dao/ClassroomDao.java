@@ -2,6 +2,7 @@ package dao;
 
 import DaoImpl.Repository;
 import entity.Classroom;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -60,6 +61,8 @@ public class ClassroomDao implements Repository<Classroom> {
 
     }catch (Exception e) {
         e.printStackTrace();
+    }finally {
+        session.close();
     }
     return null;
     }
@@ -67,18 +70,18 @@ public class ClassroomDao implements Repository<Classroom> {
     @Override
     public List<Classroom> getAll() {
         Session session = null;
-        try{
-            session=sessionFactory.openSession();
-            List<Classroom> classroomList = new ArrayList<>();
-            Query<Classroom> classroomQuery = session.createQuery("select distinct c from Classroom c ");
-            classroomList =classroomQuery.list();
+        try  {
+             session = sessionFactory.openSession();
+            Transaction transaction = session.beginTransaction();
+            List<Classroom> classroomList = session.createQuery("from Classroom", Classroom.class).list();
+            transaction.commit();
             return classroomList;
-
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
 
     @Override
     public void close() {

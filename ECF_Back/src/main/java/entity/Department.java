@@ -21,10 +21,10 @@ public class Department {
 
     private String nameDepartment;
 
-@OneToMany (mappedBy = "department", fetch = FetchType.EAGER)
+@OneToMany (mappedBy = "department", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 private List<Teacher> teacherList;
 
-    @OneToMany (mappedBy = "department")
+    @OneToMany (mappedBy = "department",cascade = CascadeType.ALL)
     private List<Classroom> classroomList;
 
     public Department(String nameDepartment) {

@@ -30,7 +30,7 @@ public class Student {
     @JoinColumn(name = "id_classroom")
     private Classroom classroom;
 
-    @OneToMany (mappedBy = "student")
+    @OneToMany (mappedBy = "student", cascade =CascadeType.ALL)
     private List<Grade> gradeList;
 
     public Student() {
@@ -45,11 +45,11 @@ public class Student {
         this.gradeList = new ArrayList<>();
     }
 
-    public void setStudent(Long student) {
+    public void setIdStudent(Long student) {
         this.idStudent = idStudent;
     }
 
-    public Long getStudent() {
+    public Long getIdStudent() {
         return idStudent;
     }
 

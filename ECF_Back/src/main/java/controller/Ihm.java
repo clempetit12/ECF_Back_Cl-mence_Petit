@@ -190,6 +190,7 @@ public class Ihm {
             int nombre = scanner.nextInt();
             scanner.nextLine();
             for (int i = 0; i < nombre; i++) {
+
                 do {
                     System.out.println("Saisissez le nom de l'étudiant (doit contenir au moins 3 caractères)  : ");
                     lastName = scanner.next();
@@ -228,12 +229,12 @@ public class Ihm {
     private void createSubject() {
         try {
             Long teacherId;
-            List<Teacher> teacherList = new ArrayList<>();
             System.out.println("Combien de matières souhaitez vous créer ?");
             int nombre = scanner.nextInt();
             scanner.nextLine();
             String name;
             for (int i = 0; i < nombre; i++) {
+                List<Teacher> teacherList = new ArrayList<>();
                 System.out.println("Saisissez le nom de la matière  : ");
                 name = scanner.next();
                 System.out.println("Saisissez la durée de la matière en minutes : ");
@@ -248,13 +249,14 @@ public class Ihm {
                     if (teacherId != 0) {
                         Teacher teacher = highSchoolService.getTeacher(teacherId);
                         teacherList.add(teacher);
+
                     }
                 } while (teacherId != 0);
                 Subject subject = new Subject(name,duration,coefficent,teacherList);
                 if (highSchoolService.createSubject(subject)) {
                     System.out.println("La matière a bien été créé avec id " + subject.getIdSubject());
                 }
-                for (Teacher teacher : teacherList) {
+                for (Teacher teacher : subject.getTeacherList()) {
                     teacher.addSubject(subject);
                 }
             }
@@ -274,9 +276,14 @@ public class Ihm {
                 System.out.println("Quel est l'id de l'étudiant dont vous voulez mettre une note ?");
                 Long idStudent = scanner.nextLong();
                 Student student = highSchoolService.getStudent(idStudent);
+                System.out.println("idStudent: " + idStudent);
+                if(student != null) {
+                    System.out.println("l'étudiant existe");
+                }
                 System.out.println("Quel est l'id de la matière dont vous voulez mettre une note ?");
                 Long idSubject = scanner.nextLong();
                 Subject subject = highSchoolService.getSubject(idSubject);
+                System.out.println("idStudent: " + idSubject);
                 do {
                     System.out.println("Veuillez saisir la note (la note ne doit pas dépasser 20 et ne doit pas être négative");
                     gradeGiven = scanner.nextInt();
@@ -359,6 +366,10 @@ public class Ihm {
     }
 
     private void displayClassrooms() {
+        List<Classroom> classroomList = highSchoolService.getAllClassroom();
+        for (Classroom classroom : classroomList) {
+            System.out.println(classroom);
+        }
     }
 
     private void displaySubjectStudent() {

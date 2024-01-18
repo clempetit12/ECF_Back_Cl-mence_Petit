@@ -16,11 +16,11 @@ public class Grade {
     private int grade ;
     private String comment;
 
-    @ManyToOne(cascade =CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_subject")
     private Subject subject;
 
-    @ManyToOne(cascade =CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_student")
     private Student student;
 
@@ -29,6 +29,12 @@ public class Grade {
         this.comment = comment;
         this.subject = subject;
         this.student = student;
+
+
+    }
+
+    public Grade() {
+
     }
 
     public void setIdGrade(Long idGrade) {

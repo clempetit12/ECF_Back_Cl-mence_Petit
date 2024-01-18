@@ -22,7 +22,7 @@ public class Subject {
     private Duration duration;
     private int coefficient;
 
-    @OneToMany (mappedBy = "subject")
+    @OneToMany (mappedBy = "subject", cascade =CascadeType.ALL)
     private List<Grade> gradeList;
 
     @ManyToMany(mappedBy = "subjectList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -38,6 +38,10 @@ public class Subject {
         this.teacherList = teacherList;
         this.scheduleList = new ArrayList<>();
         this.gradeList = new ArrayList<>();
+    }
+
+    public Subject() {
+
     }
 
     public void setIdSubject(Long idSubject) {

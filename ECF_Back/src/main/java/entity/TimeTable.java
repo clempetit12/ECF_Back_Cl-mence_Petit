@@ -28,6 +28,7 @@ public class TimeTable {
     @ManyToOne
     @JoinColumn(name = "id_schedule")
     private Schedule schedule;
+
     public TimeTable(DayOfWeek dayOfWeek, LocalTime time, Subject subject) {
         this.dayOfWeek = dayOfWeek;
         this.time = time;

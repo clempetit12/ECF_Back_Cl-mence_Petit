@@ -39,7 +39,7 @@ public class Teacher {
     )
     private List<Classroom> classroomList;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "teacher_subject",
             joinColumns = @JoinColumn(name = "id_teacher"),
@@ -75,6 +75,7 @@ public class Teacher {
             classroomList = new ArrayList<>();
         }
         classroomList.add(classroom);
+        classroom.getTeacherList().add(this);
     }
 
     public void addSubject(Subject subject) {
@@ -82,6 +83,7 @@ public class Teacher {
             subjectList = new ArrayList<>();
         }
         subjectList.add(subject);
+        subject.getTeacherList().add(this);
     }
 
     @Override

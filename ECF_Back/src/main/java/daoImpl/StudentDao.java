@@ -123,7 +123,7 @@ public class StudentDao implements Repository<Student> {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-         session.update(student);
+         session.merge(student);
          transaction.commit();
             return true;
 

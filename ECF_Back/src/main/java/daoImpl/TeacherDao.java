@@ -80,7 +80,7 @@ public class TeacherDao implements Repository<Teacher> {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            session.update(teacher);
+            session.merge(teacher);
             transaction.commit();
             return true;
 

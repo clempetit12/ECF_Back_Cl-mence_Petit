@@ -287,7 +287,10 @@ for (String string : nameStudent) {
                 }
                 for (Teacher teacher : subject.getTeacherList()) {
                     teacher.addSubject(subject);
+                    highSchoolService.updateTeacher(teacher);
                 }
+
+
             }
 
         } catch (Exception e) {
@@ -395,12 +398,12 @@ for (String string : nameStudent) {
                     System.out.println("Une classe a bien été créée avec identifiant " + classroom.getIdClassroom());
                 }
 
-                for (Student student : students) {
+                for (Student student : classroom.getStudentList()) {
                     student.setClassroom(classroom);
                     highSchoolService.updateStudent(student);
                 }
 
-                for (Teacher teacher : teachers) {
+                for (Teacher teacher : classroom.getTeacherList()) {
                     teacher.addClassroom(classroom);
                     highSchoolService.updateTeacher(teacher);
                 }
@@ -451,6 +454,7 @@ for (String string : nameStudent) {
         try {
             System.out.println("Combien de plage horaire souhaitez vous créer ? :");
             int nombre = scanner.nextInt();
+            scanner.nextLine();
             for (int i = 0; i < nombre; i++) {
                 System.out.println("Précisez l'id de la matière : ");
                 Long id = scanner.nextLong();

@@ -17,7 +17,7 @@ public class Schedule {
     @Column(name = "id_schedule", nullable = false)
     private Long idSchedule;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<TimeTable> timetableList;
 
     @OneToMany (mappedBy = "schedule",fetch = FetchType.EAGER)

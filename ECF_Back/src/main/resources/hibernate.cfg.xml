@@ -24,6 +24,7 @@
         <mapping class="daoImpl.TeacherDao"></mapping>
         <mapping class="service.HighSchoolService"></mapping>
         <mapping class="controller.Ihm"></mapping>
+        <mapping class="entity.TimeTable"></mapping>
 
 
 

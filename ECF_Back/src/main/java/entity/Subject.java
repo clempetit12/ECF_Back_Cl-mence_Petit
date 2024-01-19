@@ -25,8 +25,8 @@ public class Subject {
     @OneToMany (mappedBy = "subject", cascade =CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Grade> gradeList;
 
-    @ManyToMany(mappedBy = "subjectList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Schedule> scheduleList;
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    private List<TimeTable> timeTableList;
 
     @ManyToMany(mappedBy = "subjectList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Teacher> teacherList;
@@ -36,7 +36,6 @@ public class Subject {
         this.duration = duration;
         this.coefficient = coefficient;
         this.teacherList = teacherList;
-        this.scheduleList = new ArrayList<>();
         this.gradeList = new ArrayList<>();
     }
 

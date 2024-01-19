@@ -1,6 +1,6 @@
-package dao;
+package daoImpl;
 
-import DaoImpl.Repository;
+import Interfaces.Repository;
 import entity.Department;
 import entity.Student;
 import org.hibernate.Session;
@@ -45,6 +45,25 @@ public class StudentDao implements Repository<Student> {
 
     @Override
     public boolean delete(Long id) {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Student student = getById(id);
+            if (student != null) {
+                session.delete(student);
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+
+        }
         return false;
     }
 
@@ -71,7 +90,7 @@ public class StudentDao implements Repository<Student> {
 
     @Override
     public void close() {
-
+        sessionFactory.close();
     }
     public Long displayNumberStudentDepartment(Long id) {
         Session session = null;

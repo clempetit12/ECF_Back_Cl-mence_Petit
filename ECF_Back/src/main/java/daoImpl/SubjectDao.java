@@ -1,7 +1,7 @@
-package dao;
+package daoImpl;
 
-import DaoImpl.Repository;
-import entity.Department;
+import Interfaces.Repository;
+import entity.Subject;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,17 +11,16 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import java.util.List;
 
-public class DepartmentDao implements Repository<Department> {
-
+public class SubjectDao implements Repository<Subject> {
     private SessionFactory sessionFactory;
 
-    public DepartmentDao() {
+    public SubjectDao() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
         this.sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
 
     @Override
-    public boolean create(Department element) {
+    public boolean create(Subject element) {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -44,49 +43,32 @@ public class DepartmentDao implements Repository<Department> {
 
     @Override
     public boolean delete(Long id) {
-        Session session = null;
-        Transaction transaction = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            Department department = getById(id);
-             session.detach(department);
-            return true;
-
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
         return false;
-
     }
 
     @Override
-    public Department getById(Long id) {
+    public Subject getById(Long id) {
         Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            Department department = session.get(Department.class, id);
-            return department;
-        } catch (Exception e) {
+        try{
+            session=sessionFactory.openSession();
+            Subject subject = session.get(Subject.class,id);
+            return subject;
+
+        }catch (Exception e) {
             e.printStackTrace();
-        } finally {
+        }finally {
             session.close();
         }
         return null;
     }
 
     @Override
-    public List<Department> getAll() {
+    public List<Subject> getAll() {
         return null;
     }
 
     @Override
     public void close() {
-
+        sessionFactory.close();
     }
 }

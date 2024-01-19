@@ -1,8 +1,8 @@
-package dao;
+package daoImpl;
 
-import DaoImpl.Repository;
-import entity.Subject;
-import entity.Teacher;
+import Interfaces.Repository;
+import entity.Department;
+import entity.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,17 +12,17 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import java.util.List;
 
-public class TeacherDao implements Repository<Teacher> {
+public class DepartmentDao implements Repository<Department> {
+
     private SessionFactory sessionFactory;
 
-    public TeacherDao() {
+    public DepartmentDao() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
         this.sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
 
-
     @Override
-    public boolean create(Teacher element) {
+    public boolean create(Department element) {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -45,16 +45,37 @@ public class TeacherDao implements Repository<Teacher> {
 
     @Override
     public boolean delete(Long id) {
+
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Department department = getById(id);
+            if (department != null) {
+                session.delete(department);
+            }
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+
+        }
         return false;
+
     }
 
     @Override
-    public Teacher getById(Long id) {
+    public Department getById(Long id) {
         Session session = null;
         try{
             session=sessionFactory.openSession();
-            Teacher teacher = session.get(Teacher.class,id);
-            return teacher;
+            Department department = session.get(Department.class,id);
+            return department;
 
         }catch (Exception e) {
             e.printStackTrace();
@@ -62,15 +83,16 @@ public class TeacherDao implements Repository<Teacher> {
             session.close();
         }
         return null;
+
     }
 
     @Override
-    public List<Teacher> getAll() {
+    public List<Department> getAll() {
         return null;
     }
 
     @Override
     public void close() {
-
+        sessionFactory.close();
     }
 }

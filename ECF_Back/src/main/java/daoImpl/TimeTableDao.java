@@ -1,7 +1,8 @@
-package dao;
+package daoImpl;
 
-import DaoImpl.Repository;
-import entity.Schedule;
+import Interfaces.Repository;
+import entity.Teacher;
+import entity.TimeTable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,16 +12,17 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import java.util.List;
 
-public class ScheduleDao implements Repository<Schedule> {
+public class TimeTableDao implements Repository<TimeTable> {
 
     private SessionFactory sessionFactory;
 
-    public ScheduleDao() {
+    public TimeTableDao() {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
         this.sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
+
     @Override
-    public boolean create(Schedule element) {
+    public boolean create(TimeTable element) {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -47,12 +49,23 @@ public class ScheduleDao implements Repository<Schedule> {
     }
 
     @Override
-    public Schedule getById(Long id) {
+    public TimeTable getById(Long id) {
+        Session session = null;
+        try{
+            session=sessionFactory.openSession();
+            TimeTable timeTable = session.get(TimeTable.class,id);
+            return timeTable;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
         return null;
     }
 
     @Override
-    public List<Schedule> getAll() {
+    public List<TimeTable> getAll() {
         return null;
     }
 

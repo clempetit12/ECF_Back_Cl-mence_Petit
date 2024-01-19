@@ -15,13 +15,13 @@
         <mapping class="entity.Student"></mapping>
         <mapping class="entity.Subject"></mapping>
         <mapping class="entity.Teacher"></mapping>
-        <mapping class="dao.ClassroomDao"></mapping>
-        <mapping class="dao.DepartmentDao"></mapping>
-        <mapping class="dao.GradeDao"></mapping>
-        <mapping class="dao.ScheduleDao"></mapping>
-        <mapping class="dao.StudentDao"></mapping>
-        <mapping class="dao.SubjectDao"></mapping>
-        <mapping class="dao.TeacherDao"></mapping>
+        <mapping class="daoImpl.ClassroomDao"></mapping>
+        <mapping class="daoImpl.DepartmentDao"></mapping>
+        <mapping class="daoImpl.GradeDao"></mapping>
+        <mapping class="daoImpl.ScheduleDao"></mapping>
+        <mapping class="daoImpl.StudentDao"></mapping>
+        <mapping class="daoImpl.SubjectDao"></mapping>
+        <mapping class="daoImpl.TeacherDao"></mapping>
         <mapping class="service.HighSchoolService"></mapping>
         <mapping class="controller.Ihm"></mapping>
 

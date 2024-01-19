@@ -17,20 +17,20 @@ public class Schedule {
     @Column(name = "id_schedule", nullable = false)
     private Long idSchedule;
 
-    private Date date;
-    private Duration hour;
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TimeTable> timetableList;
 
     @OneToMany (mappedBy = "schedule",fetch = FetchType.EAGER)
     private List<Student> studentList;
 
+    public Schedule(List<TimeTable> timetableList, List<Student> studentList) {
+        this.timetableList = timetableList;
+        this.studentList = studentList;
+    }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "schedule_subject",
-            joinColumns = @JoinColumn(name = "id_schedule"),
-            inverseJoinColumns = @JoinColumn(name = "id_subject")
-    )
-    private List<Subject> subjectList;
+    public Schedule() {
+
+    }
 
     public void setIdSchedule(Long idSchedule) {
         this.idSchedule = idSchedule;

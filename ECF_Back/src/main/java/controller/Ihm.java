@@ -1,17 +1,19 @@
 package controller;
 
-import dao.*;
+import daoImpl.*;
 import entity.*;
 import service.HighSchoolService;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.time.DayOfWeek;
 
 public class Ihm {
 
@@ -25,6 +27,7 @@ public class Ihm {
     private static StudentDao studentDao;
     private static SubjectDao subjectDao;
     private static TeacherDao teacherDao;
+    private TimeTableDao timeTableDao;
 
     public Ihm() {
         classroomDao = new ClassroomDao();
@@ -34,7 +37,8 @@ public class Ihm {
         studentDao = new StudentDao();
         subjectDao = new SubjectDao();
         teacherDao = new TeacherDao();
-        highSchoolService = new HighSchoolService(classroomDao, departmentDao, gradeDao, scheduleDao, studentDao, subjectDao, teacherDao);
+        timeTableDao = new TimeTableDao();
+        highSchoolService = new HighSchoolService(classroomDao, departmentDao, gradeDao, scheduleDao, studentDao, subjectDao, teacherDao,timeTableDao);
     }
 
 
@@ -63,30 +67,36 @@ public class Ihm {
                     createClassroom();
                     break;
                 case 7:
-                    createSchedule();
+                    createTimeTable();
                     break;
                 case 8:
-                    displayClassrooms();
+                    createSchedule();
                     break;
                 case 9:
-                    displaySubjectStudent();
+                    displayClassrooms();
                     break;
                 case 10:
-                    displayGradeStudent();
+                    displaySubjectStudent();
                     break;
                 case 11:
-                    displayAverageGradeStudent();
+                    displayGradeStudent();
                     break;
                 case 12:
-                    displayNumberStudentDepartment();
+                    displayAverageGradeStudent();
                     break;
                 case 13:
-                    deleteStudent();
+                    displayNumberStudentDepartment();
                     break;
                 case 14:
-                    deleteClassroom();
+                    displayStudentLevel();
                     break;
                 case 15:
+                    deleteStudent();
+                    break;
+                case 16:
+                    deleteClassroom();
+                    break;
+                case 17:
                     deleteDepartment();
                     break;
                 case 0:
@@ -97,6 +107,24 @@ public class Ihm {
             }
 
         } while (choix != 0);
+    }
+
+    private void displayStudentLevel() {
+        System.out.println("==== Les niveaux ====");
+        System.out.println("6 - 6ème");
+        System.out.println("5 - 5ème");
+        System.out.println("4 - 4ème");
+        System.out.println("3 - 3ème");
+        System.out.println("1 - 1ère");
+        System.out.println("2 - 2nd");
+        System.out.println("0 - Terminal");
+        System.out.println("Veuillez préciser le niveau que vous souhaitez afficher ?");
+        int level = scanner.nextInt();
+        scanner.nextLine();
+List<String> nameStudent = highSchoolService.displaStudentLevel(level);
+for (String string : nameStudent) {
+    System.out.println("Nom de l'étudiant en niveau " + level + " : " + string);
+}
     }
 
     private void createDepartment() {
@@ -317,14 +345,27 @@ public class Ihm {
         try {
             List<Student> students = new ArrayList<>();
             List<Teacher> teachers = new ArrayList<>();
+
             System.out.println("Combien de classe souhaitez vous créer ? ");
             int nombre = scanner.nextInt();
             scanner.nextLine();
+
             for (int i = 0; i < nombre; i++) {
                 System.out.println("Quel est le nom de la classe ? ");
                 String name = scanner.next();
+
+                System.out.println("==== Les niveaux ====");
+                System.out.println("6 - 6ème");
+                System.out.println("5 - 5ème");
+                System.out.println("4 - 4ème");
+                System.out.println("3 - 3ème");
+                System.out.println("1 - 1ère");
+                System.out.println("2 - 2nd");
+                System.out.println("0 - Terminal");
                 System.out.println("Quel est le niveau de la classe ?");
-                String levelClassroom = scanner.next();
+                int levelClassroom = scanner.nextInt();
+                scanner.nextLine();
+
                 System.out.println("A quel département la classe est associée :");
                 Long id = scanner.nextLong();
                 Department department = highSchoolService.getDepartmentById(id);
@@ -341,7 +382,7 @@ public class Ihm {
 
                 long teacherId;
                 do {
-                    System.out.println("Saisissez l'identifiant des professeurs à ajouter (saisissez 0 pour arrêter) : ");
+                    System.out.println("Saisissez l'identifiant du professeur à ajouter (saisissez 0 pour arrêter) : ");
                     teacherId = scanner.nextLong();
                     if (teacherId != 0) {
                         Teacher teacher = highSchoolService.getTeacher(teacherId);
@@ -353,6 +394,7 @@ public class Ihm {
                 if (highSchoolService.createClassroom(classroom)) {
                     System.out.println("Une classe a bien été créée avec identifiant " + classroom.getIdClassroom());
                 }
+
                 for (Student student : students) {
                     student.setClassroom(classroom);
                     highSchoolService.updateStudent(student);
@@ -360,26 +402,87 @@ public class Ihm {
 
                 for (Teacher teacher : teachers) {
                     teacher.addClassroom(classroom);
+                    highSchoolService.updateTeacher(teacher);
                 }
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
+
+    private void createSchedule() {
+        try{
+            List<TimeTable> timetables = new ArrayList<>();
+            long timetableId;
+            do {
+                System.out.println("Saisissez l'identifiant de la timetable à associer (saisissez 0 pour arrêter) : ");
+                timetableId = scanner.nextLong();
+                if (timetableId != 0) {
+                    TimeTable timetable = highSchoolService.getTimeTable(timetableId);
+                    timetables.add(timetable);
+                }
+            } while (timetableId != 0);
+
+            List<Student> students = new ArrayList<>();
+            long studentId;
+            do {
+                System.out.println("Saisissez l'identifiant de l'étudiant à associer (saisissez 0 pour arrêter) : ");
+                studentId = scanner.nextLong();
+                if (studentId != 0) {
+                    Student student = highSchoolService.getStudent(studentId);
+                    students.add(student);
+                }
+            } while (studentId != 0);
+
+            Schedule schedule = new Schedule(timetables,students);
+            if(highSchoolService.createSchedule(schedule)){
+                System.out.println("Un nouvel emploi du temps a été créé ");
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+
+    }
+    private void createTimeTable() {
+
+        try {
+            System.out.println("Combien de plage horaire souhaitez vous créer ? :");
+            int nombre = scanner.nextInt();
+            for (int i = 0; i < nombre; i++) {
+                System.out.println("Précisez l'id de la matière : ");
+                Long id = scanner.nextLong();
+                Subject subject = highSchoolService.getSubject(id);
+                System.out.println("Précisez le jour de la semaine: ");
+                String dayInput = scanner.nextLine().toUpperCase();
+                DayOfWeek day = DayOfWeek.valueOf(dayInput);
+                System.out.println("Précisez l'heure au format HH:mm");
+                String time = scanner.next();
+                LocalTime timeConverted = LocalTime.parse(time);
+                TimeTable timeTable = new TimeTable(day, timeConverted, subject);
+                if (highSchoolService.createTimetable(timeTable)) {
+                    System.out.println("Une table à bien été créée");
+
+
+                }
+            }
 
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-
-    }
-
-    private void createSchedule() {
-
     }
 
     private void displayClassrooms() {
-        List<Classroom> classroomList = highSchoolService.getAllClassroom();
-        for (Classroom classroom : classroomList) {
-            System.out.println(classroom);
+        try {
+            List<Classroom> classroomList = highSchoolService.getAllClassroom();
+            for (Classroom classroom : classroomList) {
+                System.out.println(classroom);
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -387,48 +490,95 @@ public class Ihm {
     }
 
     private void displayGradeStudent() {
-        System.out.println("Saisissez l'id de l'élève dont vous souhaitez voir les notes :");
-        Long idStudent = scanner.nextLong();
-        Student student = highSchoolService.getStudent(idStudent);
-        if (student != null) {
-            List<Grade> gradeList = highSchoolService.getGradeStudent(idStudent);
-            for (Grade grade : gradeList) {
-                System.out.println(grade);
+        try {
+            System.out.println("Saisissez l'id de l'élève dont vous souhaitez voir les notes :");
+            Long idStudent = scanner.nextLong();
+            Student student = highSchoolService.getStudent(idStudent);
+            if (student != null) {
+                List<Grade> gradeList = highSchoolService.getGradeStudent(idStudent);
+                for (Grade grade : gradeList) {
+                    System.out.println(grade);
+                }
             }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
     }
 
     private void displayAverageGradeStudent() {
-        System.out.println("Saisissez l'id de l'élève dont vous souhaitez voir les notes :");
-        Long idStudent = scanner.nextLong();
-        Student student = highSchoolService.getStudent(idStudent);
-        if (student != null) {
-            Long moyenne = highSchoolService.getAverageGrade(idStudent);
-            System.out.println("La moyennne générale de l'étudiant est de " + moyenne);
+        try {
+            System.out.println("Saisissez l'id de l'élève dont vous souhaitez voir les notes :");
+            Long idStudent = scanner.nextLong();
+            Student student = highSchoolService.getStudent(idStudent);
+            if (student != null) {
+                Long moyenne = highSchoolService.getAverageGrade(idStudent);
+                System.out.println("La moyennne générale de l'étudiant est de " + moyenne);
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     private void displayNumberStudentDepartment() {
-        System.out.println("Veuillez indiquer id du departement : ");
-        Long id = scanner.nextLong();;
-        Department department = highSchoolService.getDepartmentById(id);
-        if(department != null) {
-Long nombre = highSchoolService.displayNumberStudentDepartment(id);
-            System.out.println("Le nombre d'élève dans le département est de :" + nombre);
+        try {
+            System.out.println("Veuillez indiquer id du departement : ");
+            Long id = scanner.nextLong();
+            ;
+            Department department = highSchoolService.getDepartmentById(id);
+            if (department != null) {
+                Long nombre = highSchoolService.displayNumberStudentDepartment(id);
+                System.out.println("Le nombre d'élève dans le département est de :" + nombre);
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     private void deleteStudent() {
+        try {
+            System.out.println("Veuillez préciser l'id de l'élève à supprimer : ");
+            Long id = scanner.nextLong();
+            Student student = highSchoolService.getStudent(id);
+            if (student != null) {
+                highSchoolService.deleteStudent(id);
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void deleteClassroom() {
+        try {
+            System.out.println("Veuillez indiquer l'id de la classe à supprimer :");
+            Long id = scanner.nextLong();
+            ;
+            Classroom classroom = highSchoolService.getClassroom(id);
+            if (classroom != null) {
+                highSchoolService.deleteClassroom(id);
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void deleteDepartment() {
+        try {
+            System.out.println("Veuillez indiquer l'id du département à supprimer :");
+            Long id = scanner.nextLong();;
+            Department department = highSchoolService.getDepartmentById(id);
+            if(department != null) {
+                highSchoolService.deleteDepartment(id);
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     private void closeAll() {
+        highSchoolService.close();
+        scanner.close();
     }
 
     private void printMenu() {
@@ -439,15 +589,17 @@ Long nombre = highSchoolService.displayNumberStudentDepartment(id);
         System.out.println("4. Créer une matière");
         System.out.println("5. Créer une note");
         System.out.println("6. Créer une classe");
-        System.out.println("7. Créer un emploi du temps");
-        System.out.println("8. Afficher la liste des classes (sans les élèves)");
-        System.out.println("9. Afficher le nombre de matière d'un élève");
-        System.out.println("10. Afficher la liste des notes d'un élève (avec les détails)");
-        System.out.println("11. Afficher la moyenne d'un élève");
-        System.out.println("12. Afficher le nombre d'élèves d'un département");
-        System.out.println("13. Supprimer un élève (supprimera sa note mais pas sa classe)");
-        System.out.println("14. Supprimer une classe (supprimera uniquement les élèves de cette classe)");
-        System.out.println("15. Supprimer un département (supprimera toutes les classes et tous les professeurs)");
+        System.out.println("7. Créer des tables de matière");
+        System.out.println("8. Créer un emploi du temps");
+        System.out.println("9. Afficher la liste des classes (sans les élèves)");
+        System.out.println("10. Afficher le nombre de matière d'un élève");
+        System.out.println("11. Afficher la liste des notes d'un élève (avec les détails)");
+        System.out.println("12. Afficher la moyenne d'un élève");
+        System.out.println("13. Afficher le nombre d'élèves d'un département");
+        System.out.println("14. Afficher tous les noms des eleves d'un niveau.");
+        System.out.println("15. Supprimer un élève (supprimera sa note mais pas sa classe)");
+        System.out.println("16. Supprimer une classe (supprimera uniquement les élèves de cette classe)");
+        System.out.println("17. Supprimer un département (supprimera toutes les classes et tous les professeurs)");
         System.out.println("0. Quitter");
         System.out.println("Saisissez votre choix :");
 

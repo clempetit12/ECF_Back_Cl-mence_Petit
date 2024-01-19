@@ -1,8 +1,7 @@
-package dao;
+package daoImpl;
 
-import DaoImpl.Repository;
+import Interfaces.Repository;
 import entity.Grade;
-import entity.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -72,7 +71,7 @@ public class GradeDao implements Repository<Grade> {
 
     @Override
     public void close() {
-
+        sessionFactory.close();
     }
 
     public List<Grade> getGradeStudent(Long id){

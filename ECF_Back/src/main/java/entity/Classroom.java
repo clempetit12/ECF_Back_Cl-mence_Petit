@@ -19,19 +19,19 @@ public class Classroom {
     private Long iDclassroom;
 
     private String nameClassroom;
-    private String levelClassroom;
+    private int levelClassroom;
 
-    @ManyToOne(cascade =CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "id_department")
     private Department department;
 
     @OneToMany (mappedBy = "classroom",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Student> studentList;
 
-    @ManyToMany(mappedBy = "classroomList", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "classroomList", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<Teacher> teacherList;
 
-    public Classroom(String nameClassroom, String levelClassroom, Department department, List<Student> studentList, List<Teacher> teacherList) {
+    public Classroom(String nameClassroom, int levelClassroom, Department department, List<Student> studentList, List<Teacher> teacherList) {
         this.nameClassroom = nameClassroom;
         this.levelClassroom = levelClassroom;
         this.department = department;

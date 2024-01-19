@@ -123,7 +123,7 @@ public class StudentDao implements Repository<Student> {
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-         session.merge(student);
+         session.update(student);
          transaction.commit();
             return true;
 
@@ -137,5 +137,23 @@ public class StudentDao implements Repository<Student> {
 
         }
         return false;
+    }
+
+    public Long displayNumberSubjectStudent(Long id) {
+        Session session = null;
+        try{
+            session=sessionFactory.openSession();
+            Student student = session.get(Student.class,id);
+            Query<Long> longQuery = session.createQuery("select count(distinct t.subject.idSubject) from TimeTable t inner join Student st on st.schedule.idSchedule = t.schedule.idSchedule where st.idStudent = :studentId", Long.class);
+            longQuery.setParameter("studentId",id);
+            Long number = longQuery.uniqueResult();
+            return number;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return null;
     }
 }

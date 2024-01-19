@@ -47,5 +47,13 @@ public class TimeTable {
         return idTimetable;
     }
 
-
+    @Override
+    public String toString() {
+        return "TimeTable{" +
+                "idTimetable=" + idTimetable +
+                ", dayOfWeek=" + dayOfWeek +
+                ", time=" + time +
+                ", subject=" + subject +
+                '}';
+    }
 }

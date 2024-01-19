@@ -15,7 +15,7 @@ import java.util.List;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_teacher", nullable = false)
+    @Column(name = "id_subject", nullable = false)
     private Long idSubject;
 
     private String title;

@@ -39,4 +39,13 @@ public class Schedule {
     public Long getIdSchedule() {
         return idSchedule;
     }
+
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "idSchedule=" + idSchedule +
+                ", timetableList=" + timetableList +
+                ", studentList=" + studentList +
+                '}';
+    }
 }

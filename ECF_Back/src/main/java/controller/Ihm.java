@@ -346,14 +346,14 @@ for (String string : nameStudent) {
 
     private void createClassroom() {
         try {
-            List<Student> students = new ArrayList<>();
-            List<Teacher> teachers = new ArrayList<>();
 
             System.out.println("Combien de classe souhaitez vous créer ? ");
             int nombre = scanner.nextInt();
             scanner.nextLine();
 
             for (int i = 0; i < nombre; i++) {
+                List<Student> students = new ArrayList<>();
+                List<Teacher> teachers = new ArrayList<>();
                 System.out.println("Quel est le nom de la classe ? ");
                 String name = scanner.next();
 
@@ -415,7 +415,7 @@ for (String string : nameStudent) {
 
 
     private void createSchedule() {
-        try{
+        try {
             List<TimeTable> timetables = new ArrayList<>();
             long timetableId;
             do {
@@ -438,17 +438,25 @@ for (String string : nameStudent) {
                 }
             } while (studentId != 0);
 
-            Schedule schedule = new Schedule(timetables,students);
-            if(highSchoolService.createSchedule(schedule)){
+            Schedule schedule = new Schedule(timetables, students);
+            if (highSchoolService.createSchedule(schedule)) {
                 System.out.println("Un nouvel emploi du temps a été créé ");
+
+
+                for (Student student : students) {
+                    student.setSchedule(schedule);
+                    highSchoolService.updateStudent(student);
+                }
+                for (TimeTable timeTable : schedule.getTimetableList()) {
+                    timeTable.setSchedule(schedule);
+                    highSchoolService.updateTimeTable(timeTable);
+                }
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-
-
     }
+
     private void createTimeTable() {
 
         try {
@@ -458,7 +466,9 @@ for (String string : nameStudent) {
             for (int i = 0; i < nombre; i++) {
                 System.out.println("Précisez l'id de la matière : ");
                 Long id = scanner.nextLong();
+                scanner.nextLine();
                 Subject subject = highSchoolService.getSubject(id);
+                System.out.println("id du sujet " + subject.getIdSubject());
                 System.out.println("Précisez le jour de la semaine: ");
                 String dayInput = scanner.nextLine().toUpperCase();
                 DayOfWeek day = DayOfWeek.valueOf(dayInput);
@@ -491,6 +501,14 @@ for (String string : nameStudent) {
     }
 
     private void displaySubjectStudent() {
+        System.out.println("Veuillez préciser l'id de l'élève dont vous voulez connaitre le nombre de matières suivies");
+        Long id = scanner.nextLong();
+        Student student = highSchoolService.getStudent(id);
+        if(student != null) {
+            Long number = highSchoolService.displayNumberStudentDepartment(id);
+            System.out.println("L'élève suit " + number + " matières");
+        }
+
     }
 
     private void displayGradeStudent() {

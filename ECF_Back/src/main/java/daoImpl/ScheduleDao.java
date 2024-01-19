@@ -1,13 +1,16 @@
 package daoImpl;
 
 import Interfaces.Repository;
+import entity.Department;
 import entity.Schedule;
+import entity.Teacher;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -48,6 +51,17 @@ public class ScheduleDao implements Repository<Schedule> {
 
     @Override
     public Schedule getById(Long id) {
+        Session session = null;
+        try{
+            session=sessionFactory.openSession();
+            Schedule schedule = session.get(Schedule.class,id);
+            return schedule;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
         return null;
     }
 
@@ -60,4 +74,6 @@ public class ScheduleDao implements Repository<Schedule> {
     public void close() {
         sessionFactory.close();
     }
+
+
 }

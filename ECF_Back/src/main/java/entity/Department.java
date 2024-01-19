@@ -70,7 +70,6 @@ private List<Teacher> teacherList;
         return "Department{" +
                 "idDepartment=" + idDepartment +
                 ", nameDepartment=" + nameDepartment +
-                ", teacherList=" + teacherList +
                 ", classroomList=" + classroomList +
                 '}';
     }

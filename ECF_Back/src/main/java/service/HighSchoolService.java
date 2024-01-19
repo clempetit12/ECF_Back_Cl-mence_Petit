@@ -3,6 +3,7 @@ package service;
 import daoImpl.*;
 import entity.*;
 
+import java.sql.Time;
 import java.util.List;
 
 public class HighSchoolService {
@@ -138,11 +139,15 @@ public class HighSchoolService {
     }
 
 
+    public Schedule getSchedule(Long id) {
+        return scheduleDao.getById(id);
+    }
 
+    public Long displayNumberSubjectStudent(Long id) {
+        return studentDao.displayNumberSubjectStudent(id);
+    }
 
-
-
-
-
-
+    public void updateTimeTable(TimeTable timeTable) {
+        timeTableDao.update(timeTable);
+    }
 }

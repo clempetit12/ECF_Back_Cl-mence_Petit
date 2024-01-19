@@ -71,4 +71,6 @@ public class SubjectDao implements Repository<Subject> {
     public void close() {
         sessionFactory.close();
     }
+
+
 }

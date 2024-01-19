@@ -10,6 +10,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+import java.sql.Time;
 import java.util.List;
 
 public class TimeTableDao implements Repository<TimeTable> {
@@ -73,4 +74,27 @@ public class TimeTableDao implements Repository<TimeTable> {
     public void close() {
 
     }
+
+    public boolean update(TimeTable timeTable) {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            session.merge(timeTable);
+            transaction.commit();
+            return true;
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+
+        }
+        return false;
+    }
+
 }
